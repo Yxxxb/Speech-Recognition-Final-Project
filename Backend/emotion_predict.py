@@ -7,7 +7,7 @@ File   :emotion_predict.py
 """
 """
 运行run_emotion
-输入参数：test_data内语音路径 eg:'../test_data/zlp1.wav'
+输入参数：test_data内语音路径 eg:'test_data/zlp1.wav'
 返回值：情感类型 性别 声音图像路径 情感图像路径
 eg: fear male images/speech.jpg images/emotion.jpg
 """
@@ -25,18 +25,18 @@ import os
 
 
 def predict(wav_file):
-    json_file = open('../saved_models/model.json', 'r')
+    json_file = open('saved_models/model.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     loaded_model = model_from_json(loaded_model_json)
     # load weights into new model
-    loaded_model.load_weights("../saved_models/Emotion_Model.h5")
+    loaded_model.load_weights("saved_models/Emotion_Model.h5")
     print("Loaded model from disk")
 
     data, sampling_rate = librosa.load(wav_file)
     plt.figure(figsize=(15, 5))
     librosa.display.waveplot(data, sr=sampling_rate)
-    plt.savefig('../images/speech.jpg')
+    plt.savefig('images/speech.jpg')
     imgPath = 'images/speech.jpg'
 
     X, sample_rate = librosa.load(wav_file, res_type='kaiser_fast', duration=2.5, sr=22050 * 2, offset=0.5)
@@ -70,7 +70,7 @@ def Radar(data_prob):
     ax.set_rlim(0, 1)
 
     ax.grid(True)
-    plt.savefig('../images/emotion.jpg')
+    plt.savefig('images/emotion.jpg')
     plt.show()
 
     return 'images/emotion.jpg'
@@ -116,4 +116,4 @@ def run_emotion(wav_path):
 
 
 if __name__ == '__main__':
-    run_emotion('../test_data/emotion_test.wav')
+    run_emotion('test_data/emotion_test.wav')
