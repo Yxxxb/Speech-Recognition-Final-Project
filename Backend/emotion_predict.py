@@ -12,7 +12,6 @@ File   :emotion_predict.py
 eg: fear male images/speech.jpg images/emotion.jpg
 """
 
-
 from tensorflow.compat.v1 import ConfigProto
 from tensorflow.compat.v1 import InteractiveSession
 from tensorflow.keras.models import model_from_json
