@@ -3,5 +3,6 @@ from wtforms import SubmitField
 from flask_wtf.file import FileField,FileRequired,FileAllowed
 
 class inputform(FlaskForm):
-    file = FileField(u"上传文件", validators=[FileRequired()])
+    file1 = FileField(u"上传语音1", validators=[FileRequired()])
+    file2 = FileField(u"上传语音2", validators=[FileRequired()])
     submit=SubmitField(u"提交")

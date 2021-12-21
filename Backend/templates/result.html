@@ -6,28 +6,67 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 
 
 <body>
+<br>
+<div class="modal-body row col-md-12">
+    <h1>最终结果:</h1>
+    <div class="col-md-12">
+        <div class="form-group">
+            <div class="card border-primary mb-3">
+                <div class="card-header">相似度分析</div>
+                <div class="card-body">
+                    <h4 class="card-title">两段语音是否为同一个人：
+                        {% if is_one %}
+                            是
+                        {% else %}
+                            否
+                        {% endif %}</h4>
+                    <h4 class="card-title">两段语音相似度：{{ similarity }}</h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="card border-primary mb-3" style="max-width: 60rem;">
+                <div class="card-header">语音1</div>
+                <div class="card-body">
+                    <h4 class="card-title">用户感情为：{{ emotion1 }}</h4>
+                    <h4 class="card-title">用户性别为：{{ gender1 }}</h4>
+                    <h4>语音频谱：</h4>
+                    <img src="data:;base64,{{ img_speech_stream1 }}" alt="load failed" height="200" width="600">
+                    <h4>情感识别雷达图：</h4>
+                    <img src="data:;base64,{{ img_emotion_stream1 }}" alt="load failed" height="400" width="600">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="card border-primary mb-3" style="max-width: 60rem;">
+                <div class="card-header">语音2</div>
+                <div class="card-body">
+                    <h4 class="card-title">用户感情为：{{ emotion2 }}</h4>
+                    <h4 class="card-title">用户性别为：{{ gender2 }}</h4>
+                    <h4>语音频谱：</h4>
+                    <img src="data:;base64,{{ img_speech_stream2 }}" alt="load failed" height="200" width="600">
+                    <h4>情感识别雷达图：</h4>
+                    <img src="data:;base64,{{ img_emotion_stream2 }}" alt="load failed" height="400" width="600">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-    <h1>hhh</h1>
-    <h2>用户感情为：{{ emotion }}</h2>
-    <h2>用户性别为：{{ gender }}</h2>
-    <img src="data:;base64,{{ img_speech_stream }}" alt="load failed" height="200" width="600">
-    <img src="data:;base64,{{ img_emotion_stream }}" alt="load failed" height="200" width="300">
-
-
-
-
-
-
-
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
 </body>
 </html>
