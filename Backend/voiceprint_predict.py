@@ -15,8 +15,8 @@ import argparse
 import functools
 import numpy as np
 import tensorflow as tf
-from utils.reader import load_audio
-from utils.utility import add_arguments, print_arguments
+from utils_voice_print.reader import load_audio
+from utils_voice_print.utility import add_arguments, print_arguments
 
 
 # 预测音频
