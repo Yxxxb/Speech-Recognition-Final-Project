@@ -22,10 +22,10 @@ from utils_text.audio_vad import crop_audio_vad
 from utils_text.utility import add_arguments, print_arguments
 
 
-def run_text(wav):
+def run_text(wav_file):
     parser = argparse.ArgumentParser(description=__doc__)
     add_arg = functools.partial(add_arguments, argparser=parser)
-    add_arg('wav_path', str, wav, "预测音频的路径")
+    add_arg('wav_path', str, wav_file, "预测音频的路径")
     add_arg('is_long_audio', bool, False, "是否为长语音")
     add_arg('use_gpu', bool, True, "是否使用GPU预测")
     add_arg('enable_mkldnn', bool, False, "是否使用mkldnn加速")

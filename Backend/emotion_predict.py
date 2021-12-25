@@ -9,7 +9,7 @@ File   :emotion_predict.py
 运行run_emotion
 输入参数：test_data内语音路径 eg:'test_data/zlp1.wav'
 返回值：情感类型 性别 声音图像路径 情感图像路径
-eg: fear male images/speech.jpg images/emotion.jpg
+eg: fear male images/emotion_test_speech.jpg images/emotion_test_emotion.jpg
 """
 
 from tensorflow.compat.v1 import ConfigProto
@@ -23,7 +23,7 @@ import librosa
 import os
 
 
-def predict(wav_file):
+def predict(wav_file, pic_name):
     json_file = open('saved_models/model.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
@@ -35,8 +35,8 @@ def predict(wav_file):
     data, sampling_rate = librosa.load(wav_file)
     plt.figure(figsize=(15, 5))
     librosa.display.waveplot(data, sr=sampling_rate)
-    plt.savefig('images/speech.jpg')
-    imgPath = 'images/speech.jpg'
+    imgPath = 'images/' + pic_name + '_speech.jpg'
+    plt.savefig(imgPath)
 
     X, sample_rate = librosa.load(wav_file, res_type='kaiser_fast', duration=2.5, sr=22050 * 2, offset=0.5)
     sample_rate = np.array(sample_rate)
@@ -53,7 +53,7 @@ def predict(wav_file):
     return livepreds, imgPath
 
 
-def Radar(data_prob):
+def Radar(wav_path, pic_name, data_prob):
     class_labels = ['angry', 'calm', 'fear', 'happy', 'sad']
     angles = np.linspace(0, 2 * np.pi, len(class_labels), endpoint=False)
     fig = plt.figure()
@@ -69,10 +69,11 @@ def Radar(data_prob):
     ax.set_rlim(0, 1)
 
     ax.grid(True)
-    plt.savefig('images/emotion.jpg')
+    imgPath = 'images/' + pic_name + '_emotion.jpg'
+    plt.savefig(imgPath)
     plt.show()
 
-    return 'images/emotion.jpg'
+    return imgPath
 
 
 def Judge_render(livepreds):
@@ -106,10 +107,13 @@ def set_GPU():
 
 
 def run_emotion(wav_path):
+    wav_list = wav_path.split('/')
+    pic_name = wav_list[-1][:-4]
+
     set_GPU()
-    livepreds, speechPath = predict(wav_path)
+    livepreds, speechPath = predict(wav_path, pic_name)
     render, data_prop, emotion = Judge_render(livepreds)
-    emotionPath = Radar(data_prop)
+    emotionPath = Radar(wav_path, pic_name, data_prop)
     print(emotion, render, speechPath, emotionPath)
     return emotion, render, speechPath, emotionPath
 
