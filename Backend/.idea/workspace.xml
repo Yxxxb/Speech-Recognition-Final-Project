@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ec239a9e-99e0-4e1e-981e-aea1c453bce6" name="默认更改列表" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Backend.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/emotion_test_DB.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/emotion_test_emotion.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/emotion_test_speech.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/result.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/result.html" afterDir="false" />
-    </list>
+    <list default="true" id="ec239a9e-99e0-4e1e-981e-aea1c453bce6" name="默认更改列表" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,7 +198,7 @@
       <workItem from="1640410328959" duration="9000" />
       <workItem from="1640410610300" duration="1354000" />
       <workItem from="1640418661689" duration="774000" />
-      <workItem from="1640419880358" duration="1753000" />
+      <workItem from="1640419880358" duration="1948000" />
     </task>
     <servers />
   </component>
