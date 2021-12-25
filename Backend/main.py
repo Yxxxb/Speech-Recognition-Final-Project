@@ -6,6 +6,14 @@ import os
 
 # from voiceprint_predict import run_voiceprint
 # from emotion_predict import run_emotion
+# from text_predict import run_text
+
+def run_text(wave_path):
+    print("run_text")
+    time='259'
+    text='近几年不但我用书给女儿压岁也劝说朋不要给女儿压岁钱改送压岁书'
+    score=99.08357018079514
+    return time,text,score
 
 def run_voiceprint(wave_path1, wave_path2):
     print("run_voiceprint")
@@ -18,9 +26,10 @@ def run_emotion(wave_path):
     print("run_emotion", 'wave_path is ' + str(wave_path))
     emotion = 'fear'
     gender = 'male'
-    path_speech = 'images/speech.jpg'
-    path_emotion = 'images/emotion.jpg'
-    return emotion, gender, path_speech, path_emotion
+    path_speech = 'images/emotion_test_speech.jpg'
+    path_emotion = 'images/emotion_test_emotion.jpg'
+    path_DB= 'images/emotion_test_DB.jpg'
+    return emotion, gender, path_speech, path_emotion,path_DB
 
 
 # fear male images/speech.jpg images/emotion.jpg
@@ -105,12 +114,17 @@ def index():
 def result():
     wave_path1 = request.args.get("wave_path1")
     wave_path2 = request.args.get("wave_path2")
-    emotion1, gender1, path_speech1, path_emotion1 = run_emotion(wave_path1)
-    emotion2, gender2, path_speech2, path_emotion2 = run_emotion(wave_path2)
+    emotion1, gender1, path_speech1, path_emotion1,path_DB1 = run_emotion(wave_path1)
+    emotion2, gender2, path_speech2, path_emotion2,path_DB2 = run_emotion(wave_path2)
     img_speech_stream1 = return_img_stream(path_speech1)
     img_speech_stream2 = return_img_stream(path_speech2)
     img_emotion_stream1 = return_img_stream(path_emotion1)
     img_emotion_stream2 = return_img_stream(path_emotion2)
+    img_DB_stream1=return_img_stream(path_DB1)
+    img_DB_stream2=return_img_stream(path_DB2)
+    time1,text1,score1=run_text(wave_path1)
+    time2,text2,score2=run_text(wave_path2)
+
 
 
     is_one,similarity=run_voiceprint(wave_path1,wave_path2)
@@ -121,10 +135,18 @@ def result():
                            gender1=gender1,
                            img_speech_stream1=img_speech_stream1,
                            img_emotion_stream1=img_emotion_stream1,
+                           img_DB_stream1=img_DB_stream1,
                            emotion2=emotion2,
                            gender2=gender2,
                            img_speech_stream2=img_speech_stream2,
-                           img_emotion_stream2=img_emotion_stream2)
+                           img_emotion_stream2=img_emotion_stream2,
+                           img_DB_stream2=img_DB_stream2,
+                           time1=time1,
+                           text1=text1,
+                           score1=score1,
+                           time2=time2,
+                           text2=text2,
+                           score2=score2)
 
 
 if __name__ == '__main__':

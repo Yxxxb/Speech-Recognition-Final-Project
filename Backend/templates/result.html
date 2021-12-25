@@ -15,10 +15,10 @@
 <br>
 <div class="modal-body row col-md-12">
     <div class="col-md-10">
-            <h1>最终结果:</h1>
+        <h1>最终结果:</h1>
     </div>
     <div class="col-md-2">
-            <a class="btn btn-danger" href="{{ url_for('index') }}">返回</a>
+        <a class="btn btn-danger" href="{{ url_for('index') }}">返回</a>
     </div>
 
     <div class="col-md-12">
@@ -45,11 +45,16 @@
                 <div class="card-body">
                     <h4 class="card-title">用户感情为：{{ emotion1 }}</h4>
                     <h4 class="card-title">用户性别为：{{ gender1 }}</h4>
+                    <h4 class="card-title">语音内容为：{{ text1 }}</h4>
+                    <h4 class="card-title">语音准确度为：{{ score1 }}</h4>
                     <h4>语音频谱：</h4>
                     <img src="data:;base64,{{ img_speech_stream1 }}" alt="load failed" class="center-block"
                          height="300" width="800">
                     <h4>情感识别雷达图：</h4>
                     <img src="data:;base64,{{ img_emotion_stream1 }}" alt="load failed" class="center-block"
+                         height="500" width="800">
+                    <h4>decibel：</h4>
+                    <img src="data:;base64,{{ img_DB_stream1 }}" alt="load failed" class="center-block"
                          height="500" width="800">
                 </div>
             </div>
@@ -62,10 +67,15 @@
                 <div class="card-body">
                     <h4 class="card-title">用户感情为：{{ emotion2 }}</h4>
                     <h4 class="card-title">用户性别为：{{ gender2 }}</h4>
+                    <h4 class="card-title">语音内容为：{{ text2 }}</h4>
+                    <h4 class="card-title">语音准确度为：{{ score2 }}</h4>
                     <h4>语音频谱：</h4>
                     <img src="data:;base64,{{ img_speech_stream2 }}" alt="load failed" height="300" width="800">
                     <h4>情感识别雷达图：</h4>
                     <img src="data:;base64,{{ img_emotion_stream2 }}" alt="load failed" height="500" width="800">
+                    <h4>decibel：</h4>
+                    <img src="data:;base64,{{ img_DB_stream2 }}" alt="load failed" class="center-block"
+                         height="500" width="800">
                 </div>
             </div>
         </div>
