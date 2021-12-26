@@ -14,6 +14,7 @@ class Predictor:
                  lang_model_path=None, beam_size=10, cutoff_prob=1.0, cutoff_top_n=40, use_gpu=True, gpu_mem=500,
                  enable_mkldnn=False, num_threads=10):
         self.audio_process = audio_process
+        # 集束搜索解码相关参数 使用贪婪策略，LM系数为1.2，WC系数为0.35，语言模型路径，搜索大小为300，剪枝概率设置为0.99，剪枝最大值设为40
         self.decoding_method = decoding_method
         self.alpha = alpha
         self.beta = beta
@@ -21,6 +22,7 @@ class Predictor:
         self.beam_size = beam_size
         self.cutoff_prob = cutoff_prob
         self.cutoff_top_n = cutoff_top_n
+
         self.use_gpu = use_gpu
         self.lac = None
         # 集束搜索方法的处理
@@ -54,6 +56,7 @@ class Predictor:
         self.config.disable_glog_info()
 
         # 根据 config 创建 predictor
+        # 将训练的模型载入到paddle的predictor中
         self.predictor = paddle_infer.create_predictor(self.config)
 
         # 获取输入层
@@ -70,9 +73,10 @@ class Predictor:
         else:
             print('预热文件不存在，忽略预热！', file=sys.stderr)
 
-    # 预测图片
+    # 预测得结果
     def predict(self, audio_path, to_an=False):
         # 加载音频文件，并进行预处理
+        # 提取音频特征
         audio_feature = self.audio_process.process_utterance(audio_path)
         audio_len = audio_feature.shape[1]
         mask_shape0 = (audio_feature.shape[0] - 1) // 2 + 1

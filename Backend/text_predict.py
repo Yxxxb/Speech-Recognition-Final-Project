@@ -56,6 +56,7 @@ def run_text(wav_file):
     if args.is_long_audio:
         return predict_long_audio(args, predictor)
     else:
+        # 进入预测阶段
         return predict_audio(args, predictor)
 
 
@@ -76,6 +77,7 @@ def predict_long_audio(args, predictor):
 
 def predict_audio(args, predictor):
     start = time.time()
+    # 调用predictor的方法进行预测
     score, text = predictor.predict(audio_path=args.wav_path, to_an=args.to_an)
     print("消耗时间：%dms, 识别结果: %s, 得分: %d" % (round((time.time() - start) * 1000), text, score))
 
