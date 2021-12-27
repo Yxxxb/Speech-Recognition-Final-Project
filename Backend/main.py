@@ -5,6 +5,8 @@ import os
 import time
 import urllib.parse
 
+wave_path1=None
+wave_path2=None
 
 # from voiceprint_predict import run_voiceprint
 # from emotion_predict import run_emotion
@@ -117,17 +119,20 @@ def index():
 
 @app.route('/loading',methods=['GET'])
 def loading():
+    global wave_path1,wave_path2
+    wave_path1=request.args.get("wave_path1")
+    wave_path2=request.args.get("wave_path2")
+
     some_data = "Here's some example data"
     some_data = urllib.parse.quote(some_data)
     return render_template('loading.html', my_data = some_data)
 
 @app.route("/result", methods=['GET'])
 def result():
+    global wave_path1,wave_path2
     data = "No data was passed"
     if request.args.to_dict(flat=False)['data'][0]:
         pass
-    wave_path1 = request.args.get("wave_path1")
-    wave_path2 = request.args.get("wave_path2")
     emotion1, gender1, path_speech1, path_emotion1 = run_emotion(wave_path1)
     emotion2, gender2, path_speech2, path_emotion2 = run_emotion(wave_path2)
     DB1, path_DB1 = run_DB(wave_path1)
