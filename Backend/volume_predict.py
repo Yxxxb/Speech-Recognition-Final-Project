@@ -46,7 +46,7 @@ def run_DB(wav_file):
         Leng = len(x)
     else:
         nframe = np.floor(Leng / frameLen)
-        x = x[0:nframe * frameLen + 1]
+        x = x[0:int(nframe * frameLen) + 1]
         Leng = len(x)
 
     N = Leng // frameLen
