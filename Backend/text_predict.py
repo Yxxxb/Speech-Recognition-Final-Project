@@ -35,8 +35,8 @@ def run_text(wav_file):
     add_arg('beta', float, 0.35, "集束搜索解码相关参数，WC系数")
     add_arg('cutoff_prob', float, 0.99, "集束搜索解码相关参数，剪枝的概率")
     add_arg('cutoff_top_n', int, 40, "集束搜索解码相关参数，剪枝的最大值")
-    add_arg('mean_std_path', str, './saved_models/thchs30/mean_std.npz', "数据集的均值和标准值的npy文件路径")
-    add_arg('vocab_path', str, './saved_models/thchs30/zh_vocab.txt', "数据集的词汇表文件路径")
+    add_arg('mean_std_path', str, './saved_models/free/mean_std.npz', "数据集的均值和标准值的npy文件路径")
+    add_arg('vocab_path', str, './saved_models/free/zh_vocab.txt', "数据集的词汇表文件路径")
     add_arg('model_dir', str, './saved_models/infer-thchs30/', "导出的预测模型文件夹路径")
     add_arg('lang_model_path', str, './lm/zh_giga.no_cna_cmn.prune01244.klm', "集束搜索解码相关参数，语言模型文件路径")
     add_arg('decoding_method', str, 'ctc_greedy', "结果解码方法，有集束搜索(ctc_beam_search)、贪婪策略(ctc_greedy)",

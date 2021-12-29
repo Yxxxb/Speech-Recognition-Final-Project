@@ -89,6 +89,10 @@ def Judge_render(livepreds):
     male_list = livepreds[5:10].tolist()
     female_list = livepreds[0:5].tolist()
 
+    print(livepreds)
+    print(isMale)
+    print(isFemale)
+
     if isMale > isFemale:
         return "male", livepreds[5:10], class_labels[male_list.index(max(male_list))]
     else:
