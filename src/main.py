@@ -5,44 +5,13 @@ import os
 import time
 import urllib.parse
 
-wave_path1=None
-wave_path2=None
+wave_path1 = None
+wave_path2 = None
 
 from voiceprint_predict import run_voiceprint
 from emotion_predict import run_emotion
 from text_predict import run_text
 from volume_predict import run_DB
-#
-# def run_text(wave_path):
-#     print("run_text")
-#     time = '259'
-#     text = '近几年不但我用书给女儿压岁也劝说朋不要给女儿压岁钱改送压岁书'
-#     score = 99.08357018079514
-#     return time, text, score
-#
-#
-# def run_voiceprint(wave_path1, wave_path2):
-#     print("run_voiceprint")
-#     is_one = True
-#     similarity = 0.9
-#     time.sleep(2)
-#     return is_one, similarity
-#
-#
-# def run_emotion(wave_path):
-#     print("run_emotion", 'wave_path is ' + str(wave_path))
-#     emotion = 'fear'
-#     gender = 'male'
-#     path_speech = 'images/yxb1(7)_speech.jpg'
-#     path_emotion = 'images/yxb1(7)_emotion.jpg'
-#     return emotion, gender, path_speech, path_emotion
-#
-#
-# def run_DB(wave_path):
-#     DB = 100
-#     path_DB = 'images/yxb1(7)_DB.jpg'
-#
-#     return DB, path_DB
 
 
 def return_img_stream(path):
@@ -117,19 +86,20 @@ def index():
                            form=form)
 
 
-@app.route('/loading',methods=['GET'])
+@app.route('/loading', methods=['GET'])
 def loading():
-    global wave_path1,wave_path2
-    wave_path1=request.args.get("wave_path1")
-    wave_path2=request.args.get("wave_path2")
+    global wave_path1, wave_path2
+    wave_path1 = request.args.get("wave_path1")
+    wave_path2 = request.args.get("wave_path2")
 
     some_data = "Here's some example data"
     some_data = urllib.parse.quote(some_data)
-    return render_template('loading.html', my_data = some_data)
+    return render_template('loading.html', my_data=some_data)
+
 
 @app.route("/result", methods=['GET'])
 def result():
-    global wave_path1,wave_path2
+    global wave_path1, wave_path2
     data = "No data was passed"
     if request.args.to_dict(flat=False)['data'][0]:
         pass
@@ -170,4 +140,4 @@ def result():
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True,threaded=True)
+    app.run(port=5000, debug=True, threaded=True)
