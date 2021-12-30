@@ -42,19 +42,13 @@ After the requirement is met, you can run the main function in SRC to launch the
 
 #### 5. Preview
 
-![image-20211230112513952](G:\LearningSource\speech recognition\Final-Project-Myself\Speech-Recognition-Final-Project\README.assets\image-20211230112513952.png)
+![image-20211230112513952](README.assets\image-20211230112513952.png)
 
-![image-20211230112749689](G:\LearningSource\speech recognition\Final-Project-Myself\Speech-Recognition-Final-Project\README.assets\image-20211230112749689.png)
+![image-20211230112749689](README.assets\image-20211230112749689.png)
 
-![image-20211230112817535](G:\LearningSource\speech recognition\Final-Project-Myself\Speech-Recognition-Final-Project\README.assets\image-20211230112817535.png)
+![image-20211230112817535](README.assets\image-20211230112817535.png)
 
-![image-20211230112837159](G:\LearningSource\speech recognition\Final-Project-Myself\Speech-Recognition-Final-Project\README.assets\image-20211230112837159.png)
-
-
-
-
-
-
+![image-20211230112837159](README.assets\image-20211230112837159.png)
 
 
 
