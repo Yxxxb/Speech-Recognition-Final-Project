@@ -38,7 +38,7 @@ If you just want to implement interactive prediction, you just need to install t
 
 #### 4. Run
 
-After the requirement is met, you can run the main function in SRC to launch the interface. You can select a WAV audio file to test. The test process takes about 10 seconds. The audio files you upload are saved in test_Data, and the generated data and charts are saved in images, which you can preview on the front end. As the save model is loaded, you need to restart the project for a second prediction.
+After the requirement is met, you can run the main.py in SRC to launch the interface. You can select a WAV audio file to test. The test process takes about 10 seconds. The audio files you upload are saved in test_Data, and the generated data and charts are saved in images, which you can preview on the front end. As the save model is loaded, you need to restart the project for a second prediction.
 
 #### 5. Preview
 
