@@ -1,27 +1,60 @@
-# 项目文档
-
-文档大概每个人的部分分成这几个模块：
-1.阐述一下解决的问题与难点 
-2.所利用到的数据集、数据处理方法、模型、损失函数等 可以稍微详细一点点 神经网络部分可以从简 主要说清楚用这些方法来干什么 为什么要用 作用是什么 为什么用别的不行 
-3.工作流 可以贴一些重要代码 从数据处理到训练、评估流程走一遍 都用了哪些部分的代码文件（这是要求里面有的）可以贴一下你们自己部分的运行结果
-4.结果分析（如果有的话）简要分析一下模型准确率等等参数 
-5.优点缺点 比如模型对什么数据识别度高 什么类型的数据识别度低 语音转文字可以说一下不同数据计算训练出来的模型的优缺点等等 自己想一想总结一下 然后加一些TODO 就是我们的模型哪些功能还需要进一步优化
+ 
 
 
 
-#### 1. 阐述一下解决的问题与难点 
+![logo](G:\LearningSource\logo.png)
 
-本模块为声纹对比系统，即对输入的两端语音进行声纹解析，判断二者是否为同一个人的语音，并且给出两语音的相似程度。我们最初的思路是构建预测声纹的深度学习模型，但是在测试的时候我们发现模型无法预测训练集外的声纹，因此又对模型进行了简单修改，不需要预测声纹所属即可计算出语音声纹相似度。后文讲对这两个模型进行解释与分析。
 
-此部分的主要难点在于构建预测模型以及导出特征矩阵并对其进行相似度计算。
+
+# Speech analysis & contrast system
+
+ REPORT for speech recognition course design.
+
+ 
+
+ 
+
+Group member:
+
+1953348 叶栩冰	1953066 刘昕宇	1953196 张铃沛
+
+
+
+Faculty advisor: 
+
+ 沈莹
+
+ 
+
+
+
+2021/12/31
+
+### Abstract
+
+This project for Tongji university 2021 fall semester speech recognition course project, project for the theme of speech analysis system, can the content of the speech for speech for input, speech emotion, voiceprint gender, basic information, such as the volume voice voice print characters matching analysis and comparison, and presents a simple interactive interface and the result analysis.
+
+### 1. Problems & difficulties
+
+Our project is mainly divided into the following three modules: Chinese speech recognition, speech emotion and gender recognition, and voice print recognition and comparison. The follow-up questions will be divided into three parts.
+
+#### 1.1 Chinese speech recognition
+
+
+
+#### 1.2 Speech emotion and gender recognition
+
+
+
+#### 1.3 Voice print recognition and comparison
 
 This module is a voiceprint comparison system, that is to analyze the voiceprint of the two ends of the input voice, judge whether they are the same person's voice, and give the degree of similarity between the two voices. Our initial idea was to build a deep learning model to predict the voiceprint. However, when testing, we found that the model could not predict the voiceprint outside the training set. Therefore, we simply modified the model to calculate the voice print similarity without predicting the voice print's ownership. These two models are explained and analyzed in the following part.  
 
 The main difficulty of voiceprint comparison system lies in the construction of the prediction model and the derivation of the feature matrix and the calculation of its similarity.  
 
-#### 2. 所利用到的数据集、数据处理方法、模型、损失函数等 可以稍微详细一点点 神经网络部分可以从简 主要说清楚用这些方法来干什么 为什么要用 作用是什么 为什么用别的不行 
+#### 2. Survey on topic & used methods
 
-本部分简要阐述所用到的数据集、数据处理、模型选取以及损失函数等主要模型构建方法，将对模型与各个方法选取过程中的效果进行权衡分析与比较。
+小组成员对选题进行了充分的调研，针对三个主要的问题，选取了不同的解决方案。本部分简要阐述所用到的数据集、数据处理、模型选取以及损失函数等主要模型构建方法，将对模型与各个方法选取过程中的效果进行权衡分析与比较。
 
 ------
 
@@ -57,23 +90,7 @@ The main difficulty of voiceprint comparison system lies in the construction of 
 
 - Model specification-Resnet
 
-  Resnet-50 residual neural network is selected for prediction in the project. Detailed network architecture is not analyzed here. The following figure shows the network architecture and input and output shape.
-
-  ```python
-  Model: "Resnet-50"
-  _________________________________________________________________
-  Layer (type)                 Output Shape              Param #   
-  =================================================================
-  resnet50v2_input (InputLayer [(None, 257, 257, 1)]     0         
-  _________________________________________________________________
-  resnet50v2 (Functional)      (None, 2048)              23558528  
-  _________________________________________________________________
-  batch_normalization (BatchNo (None, 2048)              8192      
-  =================================================================
-  Total params: 23,566,720
-  Trainable params: 23,517,184
-  Non-trainable params: 49,536
-  ```
+  Resnet-50 residual neural network is selected for prediction in the project. Detailed network architecture is not analyzed here. 
 
   At the end of each training round, model evaluation was performed to calculate the accuracy of the model and observe the convergence of the model. Similarly, the model is saved once at the end of each round of training, and the model parameters that can be restored to training are saved respectively, which can also be used as pre-training model parameters. The prediction model is also saved for later prediction.
 
@@ -98,7 +115,7 @@ The main difficulty of voiceprint comparison system lies in the construction of 
 
 
 
-#### 3. 工作流 可以贴一些重要代码 从数据处理到训练、评估流程走一遍 都用了哪些部分的代码文件（这是要求里面有的）可以贴一下你们自己部分的运行结果
+#### 3. Workflow & functionality of program
 
 此部分将结合代码中主要函数，简述模型的架构以及工作流，每个模型将从数据构建、数据处理到模型训练几个步骤进行分析与解释。
 
@@ -167,7 +184,23 @@ The main difficulty of voiceprint comparison system lies in the construction of 
   | feature_used_shape    | (2048, 1)     |
   | initial_learning_rate | 1e-3          |
 
-  
+  This is the framework of the model.
+
+  ```python
+  Model: "Resnet-50"
+  _________________________________________________________________
+  Layer (type)                 Output Shape              Param #   
+  =================================================================
+  resnet50v2_input (InputLayer [(None, 257, 257, 1)]     0         
+  _________________________________________________________________
+  resnet50v2 (Functional)      (None, 2048)              23558528  
+  _________________________________________________________________
+  batch_normalization (BatchNo (None, 2048)              8192      
+  =================================================================
+  Total params: 23,566,720
+  Trainable params: 23,517,184
+  Non-trainable params: 49,536
+  ```
 
 - Voice print contrast
 
@@ -189,7 +222,7 @@ The main difficulty of voiceprint comparison system lies in the construction of 
 
 
 
-#### 4.结果分析（如果有的话）简要分析一下模型准确率等等参数 
+#### 4.Performance evaluation & result interpretation
 
 我们对所构建的模型进行结果分析，计算模型的准确率、回归率、f1-score、ROC与AUC等参数，不同类别的模型由于输出形式不同所测试的评估值可能不尽相同。此外，我们会在此模块利用自己的测试音频进行测试并展示测试样例。
 
@@ -214,7 +247,7 @@ It can be seen that the accuracy of the model on the test set is very good. Othe
 
 
 
-#### 5.优点缺点 比如模型对什么数据识别度高 什么类型的数据识别度低 语音转文字可以说一下不同数据计算训练出来的模型的优缺点等等 自己想一想总结一下 然后加一些TODO 就是我们的模型哪些功能还需要进一步优化
+#### 5.Advantages & Disadvantages & TODOs
 
 上文对我们所构建的三部分主要的模型进行了较为详细的阐述，并对模型训练结果进行了简明扼要的分析，此部分将对项目针对三个问题所构建的三部分模型进行总结，阐述模型优缺点以及项目的一些todos。
 
