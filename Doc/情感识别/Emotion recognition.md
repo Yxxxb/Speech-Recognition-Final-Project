@@ -52,7 +52,7 @@
 
   The project selected the cnn1D one-dimensional convolutional neural network for prediction, and the detailed network architecture will not be analysed here. The general process is: averaging the feature vector of each processed audio on the 13th dimension to obtain a 216*1 vector, and use this as an input to train the model. After each round of training, an evaluation is performed to calculate the accuracy of the model to observe the convergence of the model. When the training is all completed, save the trained model for evaluation of large amounts of data and test of a single audio.
 
-#### 3.工作流
+#### 3.Workflow
 
 - create data
 
@@ -128,6 +128,20 @@
 
   ```python
   cnnhistory=model.fit(x_traincnn, y_train, batch_size=16, epochs=700, validation_data=(x_testcnn, y_test))
+  ```
+
+  The model parameters are shown below
+
+  ```python
+  # parameters
+  epochs: 60
+  batch_size: 32 
+  lr: 0.001 
+  
+  n_kernels: 32
+  kernel_sizes: [5, 5]
+  dropout: 0.5
+  hidden_size: 32
   ```
 
   The training process and the loss and accuracy obtained after each round in the model training process are shown in the figure below. It can be seen that the model converges significantly faster after 200 epochs.
