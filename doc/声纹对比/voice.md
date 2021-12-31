@@ -15,21 +15,25 @@
 
 此部分的主要难点在于构建预测模型以及导出特征矩阵并对其进行相似度计算。
 
+This module is a voiceprint comparison system, that is to analyze the voiceprint of the two ends of the input voice, judge whether they are the same person's voice, and give the degree of similarity between the two voices. Our initial idea was to build a deep learning model to predict the voiceprint. However, when testing, we found that the model could not predict the voiceprint outside the training set. Therefore, we simply modified the model to calculate the voice print similarity without predicting the voice print's ownership. These two models are explained and analyzed in the following part.  
+
+The main difficulty of voiceprint comparison system lies in the construction of the prediction model and the derivation of the feature matrix and the calculation of its similarity.  
+
 #### 2. 所利用到的数据集、数据处理方法、模型、损失函数等 可以稍微详细一点点 神经网络部分可以从简 主要说清楚用这些方法来干什么 为什么要用 作用是什么 为什么用别的不行 
 
 本部分简要阐述所用到的数据集、数据处理、模型选取以及损失函数等主要模型构建方法，将对模型与各个方法选取过程中的效果进行权衡分析与比较。
 
 ------
 
-- 数据集-Zhvoice
+- Dataset-Zhvoice
 
   本模块所用到的数据集为Zhvoice中文语料库，此数据集一共有3242个人的语音数据，有1130000+条语音数据。相较于其他数据集，该数据集对任务进行了标签处理，数据量较大，人物数量能够满足模型的训练需求。
 
-- 数据处理-STFT
+  The data set used in this module is Zhvoice Chinese corpus, which has a total of 3242 individual voice data, including 1,130,000 + voice data. Compared with other data sets, this data set labels tasks and has a large amount of data, and the number of characters can meet the training requirements of the model.
 
-  短时傅里叶变换(Short-Time Fourier Transform, STFT)
+- Data Processing-STFT
 
-  短时傅里叶变换定义为
+  Short-Time Fourier Transform, STFT, which is defined as:
 
   ![[公式]](https://www.zhihu.com/equation?tex=X%28n%2C%5Comega%29%3D%5Csum_%7Bm%3D-%5Cinfty%7D%5E%5Cinfty+x%28m%29w%28n-m%29e%5E%7B-j%5Comega+m%7D)
 
