@@ -148,9 +148,9 @@
 
   ![](情感识别.assets/评估.png)
 
-  <img src="情感识别.assets/los.png"  />
+  <img src="情感识别.assets/los.png" style="zoom:150%;" />
 
-  <img src="情感识别.assets/accuracy.png"  />
+  <img src="情感识别.assets/accuracy.png" style="zoom:150%;" />
 
 - predict emotion with model
 

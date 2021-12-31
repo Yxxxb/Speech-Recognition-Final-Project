@@ -55,121 +55,119 @@ It is found that the use of CTC is very unstable in the early stage of training,
 
 #### 3.working flow
 
-- ##### creating data,handling data
+##### creating data,handling data
 
-  We should build a data generator for training data and testing data
+We should build a data generator for training data and testing data
 
-  ~~~python
-  train_generator = DataGenerator(vocab_filepath=args.vocab_path,
-                                  mean_std_filepath=args.mean_std_path,
-                                  augmentation_config=augmentation_config,
-                                  max_duration=args.max_duration,
-                                  min_duration=args.min_duration,
-                                  place=place)
-  ~~~
+~~~python
+train_generator = DataGenerator(vocab_filepath=args.vocab_path,
+                                mean_std_filepath=args.mean_std_path,
+                                augmentation_config=augmentation_config,
+                                max_duration=args.max_duration,
+                                min_duration=args.min_duration,
+                                place=place)
+~~~
 
-  The parameters are passed through the format of the configuration file. The parameters of the generator are presets for the generator, including the input vocabulary, the file of the average standard value of the data set, and some data operations.
+The parameters are passed through the format of the configuration file. The parameters of the generator are presets for the generator, including the input vocabulary, the file of the average standard value of the data set, and some data operations.
 
-  Then call the generator function to generate sub-batch training data and test data
+Then call the generator function to generate sub-batch training data and test data
 
-  ~~~python
-  train_batch_reader = train_generator.batch_reader_creator(manifest_path=args.train_manifest,                                     			   batch_size=args.batch_size,                                                  	shuffle_method=args.shuffle_method)
-  ~~~
+~~~python
+train_batch_reader = train_generator.batch_reader_creator(manifest_path=args.train_manifest,                                     			   batch_size=args.batch_size,                                                  	shuffle_method=args.shuffle_method)
+~~~
 
-  In the data generator, the audio address and the audio corresponding text data are connected together to form a tuple
+In the data generator, the audio address and the audio corresponding text data are connected together to form a tuple
 
-  ~~~python
-  inst = self.process_utterance(instance["audio_filepath"], instance["text"])
-  ~~~
+~~~python
+inst = self.process_utterance(instance["audio_filepath"], instance["text"])
+~~~
 
-  Information reading uses the fluid part of paddle to use its set_batch_generator function to pass in the data reader.
+Information reading uses the fluid part of paddle to use its set_batch_generator function to pass in the data reader.
 
-- ##### model training
+##### model training
 
-  Params:
+Params:
 
-  batch_size:16
+batch_size:16
 
-  learning_rate:5e-4
+learning_rate:5e-4
 
-  max_duration:20.0
+max_duration:20.0
 
-  min_duration:0.5
+min_duration:0.5
 
-  mean_std_path:./dataset/mean_std.npz
+mean_std_path:./dataset/mean_std.npz
 
-  num_conv_layer:2
+num_conv_layer:2
 
-  num_epoch:50
+num_epoch:50
 
-  num_rnn_layer:3
+num_rnn_layer:3
 
-  Use paddle for training, call paddle.static.Executor to generate a model trainer, and initialize it
+Use paddle for training, call paddle.static.Executor to generate a model trainer, and initialize it
 
-  ~~~python
-  exe = paddle.static.Executor(self._place)
-  exe.run(startup_prog)
-  ~~~
+~~~python
+exe = paddle.static.Executor(self._place)
+exe.run(startup_prog)
+~~~
 
-  Then the training is performed and the training process data is saved
+Then the training is performed and the training process data is saved
 
-  ~~~python
-  fetch = exe.run(program=train_compiled_prog, fetch_list=[ctc_loss.name], return_numpy=False)
-  ~~~
+~~~python
+fetch = exe.run(program=train_compiled_prog, fetch_list=[ctc_loss.name], return_numpy=False)
+~~~
 
-  The returned FETCH contains the loss rate of training. After calculation, the loss of an EPOCH can be obtained and the time of a training can be calculated. The model was saved once after every 10,000 batches and once after each epoch until the end of the training.
+The returned FETCH contains the loss rate of training. After calculation, the loss of an EPOCH can be obtained and the time of a training can be calculated. The model was saved once after every 10,000 batches and once after each epoch until the end of the training.
 
-- ##### SpecAugment
 
-  The sound waves are transformed into spectral maps before being fed into the network as training data. Data enhancement is usually first applied to sound waves and then transformed into spectral images. For each iteration, the new sound, enhanced by the data, needs to be converted into a spectral map. In our approach, we augment the spectrum directly, rather than the acoustic data. Because the data enhancement of this method is directly used on the input features, it can be added dynamically in real time, without the need for a lot of computational costs that affect the training speed like the data enhancement of sound waves. SpecAugment modifies the spectral diagram by distorting the time domain signal, masking the frequency domain channel, and masking the time domain channel. This enhancement method can be used to increase the robustness of the network, to resist deformation in the time domain and partial fragment loss in the frequency domain.
 
-- ##### using model
+##### Train model
 
-  When the speech prediction is needed, the audio file is loaded and preprocessed, including extracting audio features and obtaining some audio parameters  
+When the speech prediction is needed, the audio file is loaded and preprocessed, including extracting audio features and obtaining some audio parameters  
 
-  ~~~python
-  audio_feature = self.audio_process.process_utterance(audio_path)
-  audio_len = audio_feature.shape[1]
-  mask_shape0 = (audio_feature.shape[0] - 1) // 2 + 1
-  mask_shape1 = (audio_feature.shape[1] - 1) // 3 + 1
-  mask_max_len = (audio_len - 1) // 3 + 1
-  mask_ones = np.ones((mask_shape0, mask_shape1))
-  mask_zeros = np.zeros((mask_shape0, mask_max_len - mask_shape1))
-  mask = np.repeat(np.reshape(np.concatenate((mask_ones, mask_zeros), axis=1),
-                              (1, mask_shape0, mask_max_len)), 32, axis=0)
-  ~~~
+~~~python
+audio_feature = self.audio_process.process_utterance(audio_path)
+audio_len = audio_feature.shape[1]
+mask_shape0 = (audio_feature.shape[0] - 1) // 2 + 1
+mask_shape1 = (audio_feature.shape[1] - 1) // 3 + 1
+mask_max_len = (audio_len - 1) // 3 + 1
+mask_ones = np.ones((mask_shape0, mask_shape1))
+mask_zeros = np.zeros((mask_shape0, mask_max_len - mask_shape1))
+mask = np.repeat(np.reshape(np.concatenate((mask_ones, mask_zeros), axis=1),
+                            (1, mask_shape0, mask_max_len)), 32, axis=0)
+~~~
 
-  The Paddleinfer paddle will then be used to generate Predictor and call it to predict the model
+The Paddleinfer paddle will then be used to generate Predictor and call it to predict the model
 
-  Once the data is bound, call Predictor's Run method
+Once the data is bound, call Predictor's Run method
 
-  ~~~python
-  self.predictor.run()
-  ~~~
+~~~python
+self.predictor.run()
+~~~
 
-  You can then get the output
+You can then get the output
 
-  ~~~python
-  output_handle = self.predictor.get_output_handle(self.output_names[0])
-  ~~~
+~~~python
+output_handle = self.predictor.get_output_handle(self.output_names[0])
+~~~
 
-  The output that is returned here is a two-dimensional array and the predicted result is a two-dimensional sequence of probabilities, each row being the probability of each word that the current sound is likely to pick up. Take the column coordinates of the word with the highest probability in each row and form a one-dimensional list, called the maximum index of each row. Then take out the probability values corresponding to all the maximum indexes in the whole probability sequence table to form a one-dimensional list, which is called the maximum probability list. Process to remove empty indexes and consecutive identical indexes from the maximum index list (which removes most of the data). According to the ultimate maximum index table to the word dictionary to find the corresponding words of each index, connected together to form a sentence. Adding up all the maximum probabilities and dividing by the length of the maximum probability list gives the average accuracy per word of the sentence. This accuracy rate will be returned to the front end as the score of the speech prediction.
+The output that is returned here is a two-dimensional array and the predicted result is a two-dimensional sequence of probabilities, each row being the probability of each word that the current sound is likely to pick up. Take the column coordinates of the word with the highest probability in each row and form a one-dimensional list, called the maximum index of each row. Then take out the probability values corresponding to all the maximum indexes in the whole probability sequence table to form a one-dimensional list, which is called the maximum probability list. Process to remove empty indexes and consecutive identical indexes from the maximum index list (which removes most of the data). According to the ultimate maximum index table to the word dictionary to find the corresponding words of each index, connected together to form a sentence. Adding up all the maximum probabilities and dividing by the length of the maximum probability list gives the average accuracy per word of the sentence. This accuracy rate will be returned to the front end as the score of the speech prediction.
 
-  #### 4.result analysis
+#### 4.result analysis
 
-  ![image-20211231112256103](语音识别（语音转文字en）.assets/image-20211231112256103.png)
+![image-20211231112256103](语音识别（语音转文字en）.assets/image-20211231112256103.png)
 
-  First, show some parameters in the prediction process.
+First, show some parameters in the prediction process.
 
-  ![image-20211231112320322](语音识别（语音转文字en）.assets/image-20211231112320322.png)
+![image-20211231112320322](语音识别（语音转文字en）.assets/image-20211231112320322.png)
 
-  Then print the result of recognition, recognition time and average accuracy per word of speech.  
+Then print the result of recognition, recognition time and average accuracy per word of speech.  
 
-  Compared three models, thchs30 recognition effect is centered, around 70%, the correct and audio accuracy is better, but the pronunciation for words some relatively weak, may be due to the tsinghua university library contains a lot of proper nouns, including complex names, news language generally comparatively large difference with the actual life, so the identification results.  
+Compared three models, thchs30 recognition effect is centered, around 70%, the correct and audio accuracy is better, but the pronunciation for words some relatively weak, may be due to the tsinghua university library contains a lot of proper nouns, including complex names, news language generally comparatively large difference with the actual life, so the identification results.  
 
-  Aishell use same accuracy is low, voice and data is too concentrated in specific areas, lack of life language voice and data, therefore easier to a phoneme in training and rare combination of synthesis for words at ordinary times, and can't identify the situation of the words it produces words generated situation, lead to the resulting low voice and data accuracy.  
+Aishell use same accuracy is low, voice and data is too concentrated in specific areas, lack of life language voice and data, therefore easier to a phoneme in training and rare combination of synthesis for words at ordinary times, and can't identify the situation of the words it produces words generated situation, lead to the resulting low voice and data accuracy.  
 
-  The free-ST model has a good effect, but it has high requirements on the pronunciation of words, and the accuracy rate is about 90%. It supports the recognition of some proper nouns and has a large reserve of words. It is the training set and training model that we finally use.  
+The free-ST model has a good effect, but it has high requirements on the pronunciation of words, and the accuracy rate is about 90%. It supports the recognition of some proper nouns and has a large reserve of words. It is the training set and training model that we finally use.  
 
 #### 5.advantages and disadvantages
 
