@@ -37,27 +37,27 @@ The main difficulty of voiceprint comparison system lies in the construction of 
 
   ![[公式]](https://www.zhihu.com/equation?tex=X%28n%2C%5Comega%29%3D%5Csum_%7Bm%3D-%5Cinfty%7D%5E%5Cinfty+x%28m%29w%28n-m%29e%5E%7B-j%5Comega+m%7D)
 
-  其中 ![[公式]](https://www.zhihu.com/equation?tex=x%28m%29) 为输入信号， ![[公式]](https://www.zhihu.com/equation?tex=w%28m%29) 是窗函数，它在时间上反转并且有n个样本的偏移量。 ![[公式]](https://www.zhihu.com/equation?tex=X%28n%2C%5Comega%29) 是时间 ![[公式]](https://www.zhihu.com/equation?tex=n) 和频率 ![[公式]](https://www.zhihu.com/equation?tex=%5Comega) 的二维函数，它将信号的时域和频域联系起来，我们可以据此对信号进行时频分析，比如 ![[公式]](https://www.zhihu.com/equation?tex=S%28n%2C%5Comega%29%3D%7CX%28n%2C%5Comega%29%7C%5E2) 就是语音信号所谓的语谱图(Spectrogram)。
+  Among the formula,  ![[公式]](https://www.zhihu.com/equation?tex=x%28m%29) is the input signal， ![[公式]](https://www.zhihu.com/equation?tex=w%28m%29) is the window function，it reverses in time and has an offset of n samples. ![[公式]](https://www.zhihu.com/equation?tex=X%28n%2C%5Comega%29) is a two-dimensional function of time ![[公式]](https://www.zhihu.com/equation?tex=n) and frequency ![[公式]](https://www.zhihu.com/equation?tex=%5Comega) , it connects the time domain and frequency domain of the signal, and we can analyze the time frequency of the signal, for instance, ![[公式]](https://www.zhihu.com/equation?tex=S%28n%2C%5Comega%29%3D%7CX%28n%2C%5Comega%29%7C%5E2) is a speech signal called a spectrogram.
 
-  画出上节中两路扫频信号叠加后的信号的语谱图，如下图
+  The following figure shows the spectrogram of two sweep signals after superposition.
 
   ![image-20211230121327968](声纹对比.assets/image-20211230121327968.png)
 
-  可见该信号是由一个0~250Hz二次递增的扫频信号和一个250~0Hz二次递减的扫频信号的叠加。通过STFT，我们可以很容易地得出非平稳信号的时变特性。
+  It can be seen that the signal is the superposition of a 0-250Hz twice increasing sweep signal and a 250-0Hz twice decreasing sweep signal. By STFT, we can easily obtain the time-varying characteristics of non-stationary signals.
 
-  计算语谱 ![[公式]](https://www.zhihu.com/equation?tex=S%28n%2C%5Comega%29) 时采用不同窗长度，可以得到两种语谱图，即窄带和宽带语谱图。长时窗（至少两个基音周期)常被用于计算窄带语谱图，短窗则用于计算宽带语谱图。窄带语谱图具有较高的频率分辨率和较低的时间分辨率，良好的频率分辨率可以让语音的每个谐波分量更容易被辨别，在语谱图上显示为水平条纹。相反宽带语谱图具有较高的时间分辨率和较低的频率分辨率，低频率分辨率只能得到谱包络，良好的时间分辨率适合用于分析和检验英语语音的发音。
+  Different window lengths are used in spectral calculation ![[公式]](https://www.zhihu.com/equation?tex=S%28n%2C%5Comega%29) , Two kinds of spectrograms, narrowband and wideband, can be obtained. Long time Windows (at least two pitch periods) are often used to calculate narrowband spectrograms, while short Windows are used to calculate broad-band spectrograms. Narrowband speech spectrogram has high frequency resolution and low time resolution. With good frequency resolution, each harmonic component of speech can be more easily identified and displayed as horizontal fringe on speech spectrogram. On the contrary, broadband spectrogram has high time resolution and low frequency resolution. Low frequency resolution can only obtain spectral envelope, and good time resolution is suitable for analyzing and testing Chinese pronunciation.
 
-  如下图所示，分别为一段语音的帧长为128和512的语谱图。
+  As shown below, the spectrograms of a speech with frame length 128 and 512 are respectively.
 
   ![image-20211230121356539](声纹对比.assets/image-20211230121356539.png)
 
-  可见，对于帧长固定的短时傅里叶变换，在全局范围内的时间分辨率和频率分辨率是固定的。
+  It can be seen that for the STFT with fixed frame length, the time resolution and frequency resolution are fixed in the global scope.
 
-  这样我们对音频数据集进行处理，将音频转化为257*257的短时傅里叶变换（STFT）幅度谱。
+  We then processed the audio data set, converting the audio to a 257*257 STFT amplitude spectrum.
 
-- 模型构建-残差神经网络
+- Model specification-Resnet
 
-  项目选取Resnet-50残差神经网络进行预测，详细有关网络的架构在此不进行分析，下图为网络的架构以及输入输出的shape。
+  Resnet-50 residual neural network is selected for prediction in the project. Detailed network architecture is not analyzed here. The following figure shows the network architecture and input and output shape.
 
   ```python
   Model: "Resnet-50"
@@ -75,23 +75,23 @@ The main difficulty of voiceprint comparison system lies in the construction of 
   Non-trainable params: 49,536
   ```
 
-  每训练一轮结束之后，执行一次模型评估，计算模型的准确率，以观察模型的收敛情况。同样的，每一轮训练结束保存一次模型，分别保存了可以恢复训练的模型参数，也可以作为预训练模型参数。还保存预测模型，用于之后预测。
+  At the end of each training round, model evaluation was performed to calculate the accuracy of the model and observe the convergence of the model. Similarly, the model is saved once at the end of each round of training, and the model parameters that can be restored to training are saved respectively, which can also be used as pre-training model parameters. The prediction model is also saved for later prediction.
 
-- 损失函数-ArcFace
+- Loss function-ArcFace
 
-  ArcFace是伦敦帝国理工学院在2018.01发表，在Sphere Face基础上改进了对特征向量归一化和加性角度间隔，提高了类间可分性同时加强类内紧度和类间差异，具有性能高，易于编程实现，复杂性低，训练效率高的优点。对特征向量和权重归一化，对θ加上角度间隔m，角度间隔比余弦间隔在对角度的影响更加直接。
+  ArcFace is published by Imperial College London in January 2018. Based on Sphere Face, it improves the normalization and additive Angle interval of feature vectors, improves the separability between classes, and strengthens the intra-class compactness and differences between classes. ArcFace has the advantages of high performance, easy programming, low complexity and high training efficiency. For the normalization of eigenvectors and weights, for θ plus the Angle interval m, the Angle interval has more direct effect on angles than the cosine interval.
 
   As the embedding features are distributed around each feature Centre on the hypersphere, we add an additive angular margin penalty m between xi and Wyi to simultaneously enhance the intra-class compactness and inter-class discrepancy. Since the proposed additive angular margin penalty is equal to the geodesic distance margin penalty in the normalized hypersphere, we name our method as ArcFace.
 
   ![image-20211230121810175](声纹对比.assets/image-20211230121810175.png)
 
-- 重构模型-对角余弦值
+- Refactoring model-Diagonal cosine
 
-  在问题简述与难点部分我们发现了如下问题：由于受训练数据集的限制，我们无法对自己的声音和更加多元的声音进行对比，而且没法给出两音频之间的相似关系。因此我们对模型进行了重构，不对输入语音进行预测，而是去对比模型过程中输出的特征值。
+  In the problem brief and difficult parts, we found the following problems: Due to the limitation of training data set, we could not compare our own voice with more diverse voices, and we could not give the similar relationship between the two voices. Therefore, we reconstructed the model. Instead of predicting the input speech, we compared the output eigenvalues in the process of the model.
 
   ![image-20211230122411598](声纹对比.assets/image-20211230122411598.png)
 
-  即在残差神经网络中输出的维度为(2048, 1)的特征矩阵，我们只需要对两输入语音特征值求解对角余弦值得到相似度，然后设置阈值判断两音频是否来自已同一个人。
+  That is, in the feature matrix with the output dimension of (2048, 1) in the residual neural network, we only need to solve the diagonal cosine value of the two input speech feature values to the similarity, and then set the threshold value to judge whether the two audio is from the same person.
   $$
   dist=\frac{np.dot(feature1, feature2)}{np.linalg.norm(feature1) * np.linalg.norm(feature2)}
   $$
@@ -108,7 +108,11 @@ The main difficulty of voiceprint comparison system lies in the construction of 
 
   我们将利用数据集创建一个数据列表，数据列表的格式为`<语音文件路径\t语音分类标签>`，创建这个列表主要是方便之后的读取，也是方便读取使用其他的语音数据集，语音分类标签是指说话人的唯一ID，不同的语音数据集，可以通过编写对应的生成数据列表的函数，把这些数据集都写在同一个数据列表中。
 
+  We will use the data set to create a data list, the format of the data list is`< speech file path \t speech classification label > `, the creation of this list is mainly for the convenience of reading later, but also for the convenience of reading using other speech data sets, speech classification label refers to the unique ID of the speaker, different speech data sets, we can write these datasets in the same data list by writing the corresponding functions that generate the data list.
+
   在create_data.py中进行数据标签处理，由于mp3格式的音频读取速度较慢，因此要把全部的mp3格式的音频转换为wav格式，在创建数据列表之后，可能有些数据的是错误的，所以我们要检查一下，将错误的数据删除。执行下面程序完成数据准备。形成了如下数据格式与标签。
+
+  Data label processing in the create_data.py, because mp3 format audio reading speed is slow, so to convert all mp3 format audio to WAV format, after creating the data list, some data may be wrong, so we want to check, delete the wrong data. Perform the following procedure to complete the data preparation. The following data formats and labels are formed.
 
   ```
   Speech-Recognition-Final-Project/5_895/5_895_20170614203758.wav	3238
@@ -119,9 +123,11 @@ The main difficulty of voiceprint comparison system lies in the construction of 
   Speech-Recognition-Final-Project/5_968/5_968_20170614162657.wav	3240
   ```
 
-- 数据处理
+- Data processing
 
   有了上面创建的数据列表和均值标准值，就可以用于训练读取。主要是把语音数据转换短时傅里叶变换的幅度谱，并在此步骤进行数据增强，如随机翻转拼接，随机裁剪。经过处理，最终得到一个257*257的短时傅里叶变换的幅度谱。
+
+  With the data list and mean standard values created above, it can be used for training reads. The speech data is mainly converted into the amplitude spectrum of short-time Fourier transform, and data enhancement is carried out in this step, such as random turnover splicing, random clipping. After processing, we get a 257 by 257 STFT amplitude spectrum.
 
   ```python
   # STFT
@@ -132,13 +138,15 @@ The main difficulty of voiceprint comparison system lies in the construction of 
   mag_T = mag.T
   ```
 
-- 模型训练
+- Model training
 
   运行train.py开始训练模型，使用tensorflow的resnet50模型，数据输入层设置为[None, 1, 257, 257]，即短时傅里叶变换的幅度谱的shape。为了更好的观测模型训练效果并节省训练时间，每训练一轮结束之后，执行一次模型评估，计算模型的准确率，以观察模型的收敛情况。同样的，每一轮训练结束保存一次模型，分别保存了可以恢复训练的模型参数，也可以作为预训练模型参数。
 
+  Run train.py to start training the model, using RESnet50 model oftensorflow, and set the data input layer to [None, 1, 257, 257], that is, the shape of the amplitude spectrum of the STFT. In order to better observe the training effect of the model and save the training time, model evaluation was performed after each training round to calculate the accuracy of the model and observe the convergence of the model. Similarly, the model is saved once at the end of each round of training, and the model parameters that can be restored to training are saved respectively, which can also be used as pre-training model parameters.
+
   ```python
   def create_model(input_shape):
-      # 获取模型
+      # Build model
       model = tf.keras.Sequential()
       model.add(ResNet50V2(input_shape=input_shape, include_top=False, weights=None, pooling='max'))
       model.add(BatchNormalization())
@@ -146,6 +154,8 @@ The main difficulty of voiceprint comparison system lies in the construction of 
       model.add(ArcNet(num_classes=args.num_classes))
       return model
   ```
+
+  These are some parameters of the model.
 
   | params                | num           |
   | --------------------- | ------------- |
@@ -159,15 +169,15 @@ The main difficulty of voiceprint comparison system lies in the construction of 
 
   
 
-- 声纹对比
+- Voice print contrast
 
-  运行对比函数voiceprint_predict.py，利用残差神经网络输出的音频特征值，求解他们的对角余弦值，得到的结果作为他们相识度。
+  Run voiceprint_predict.py, ssing the audio eigenvalue output by residual neural network, their diagonal cosine value is solved, and the result is used as their acquaintance degree.
 
   ```python
-  # 声纹对比
+  # Voice print contrast
       feature1 = infer(args.audio_path1, model, input_shape)[0]
       feature2 = infer(args.audio_path2, model, input_shape)[0]
-      # 对角余弦值
+      # acquaintance degree
       cos = np.dot(feature1, feature2) / (np.linalg.norm(feature1) * np.linalg.norm(feature2))
       if dist > 0.7:
           print("为同一个人，相似度为：%f" % (cos))
@@ -185,7 +195,7 @@ The main difficulty of voiceprint comparison system lies in the construction of 
 
 ------
 
-在上文中提到模型训练在每一轮训练结束之后对会被执行，并且训练结束之后会保存预测模型，我们用预测模型来预测测试集中的音频特征。由于此模块功能为模型之间的对比，因此要使用音频特征进行两两对比，阈值从0到1,步长为0.01进行控制，找到最佳的阈值并计算准确率。
+As mentioned above, the model training will be performed after each round of training, and the prediction model will be saved after the training. We use the prediction model to predict the audio features in the test set. Since the function of this module is to compare between models, audio features should be used to compare in pairs. The threshold value is from 0 to 1, and the step size is 0.01 for control, so as to find the best threshold value and calculate the accuracy rate.
 
 ```python
 -----------  Configuration Arguments -----------
@@ -200,7 +210,7 @@ model_path: models/voice_model.h5
 当阈值为0.990000, 准确率最大，准确率为：0.999693
 ```
 
-可见模型在测试集上的准确率表现非常好。由于声纹对比无法像多分类预测一样提供标准化的结果信息，因此不对回归率等其他参数进行计算。
+It can be seen that the accuracy of the model on the test set is very good. Other parameters, such as regression rate, are not calculated because voiceprint comparison cannot provide standardized result information like multi-classification prediction.
 
 
 
@@ -210,7 +220,7 @@ model_path: models/voice_model.h5
 
 ------
 
-项目在声纹对比模型对模型架构进行了很好的设计，利用训练得到的残差神经网络模型生成的特征矩阵而非预测结果，这样很好地解决了无法预测测试集外语音的问题，实现了最初的设计目的。本项目依然有一些声纹识别应用所共有的缺点，比如同一个人的声音具有易变性，易受身体状况、年龄、情绪等的影响；不同的麦克风和信道对识别性能有影响；环境噪音对识别有干扰；如混合说话人的情形下人的声纹特征不易提取等。但是实质上，我们在中文语音识别中使用的SpenAugment很好的解决了数据声音变形与噪音问题，因此项目将在未来针对以上问题进行模型之间的方法公用，已解决共性问题。
+In this project, the model architecture was well designed in the contrast model of voice print, and the feature matrix generated by the residual neural network model obtained from training was used instead of the prediction result. In this way, the problem that the speech outside the test set could not be predicted was well solved and the original design goal was realized. This project still has some common shortcomings of voice print recognition applications. For example, the voice of the same person is changeable and easily affected by physical condition, age, emotion, etc. Different microphones and channels affect the recognition performance. Environmental noise interferes with identification; For example, in the case of mixed speaker, it is difficult to extract the characteristics of human voice print. However, in essence, SpenAugment we use in Chinese speech recognition has solved the problems of data voice deformation and noise very well. Therefore, the project will share the methods between models for the above problems in the future and solve the common problems.
 
 
 
